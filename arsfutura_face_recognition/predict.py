@@ -7,8 +7,8 @@ from constants import MODEL_PATH
 
 Face = namedtuple('Face', 'bb identity probability')
 
-align = openface.AlignDlib('models/shape_predictor_68_face_landmarks.dat')
-net = openface.TorchNeuralNet('models/nn4.small2.v1.t7', imgDim=96, cuda=False)
+align = openface.AlignDlib('../models/shape_predictor_68_face_landmarks.dat')
+net = openface.TorchNeuralNet('../models/nn4.small2.v1.t7', imgDim=96, cuda=False)
 le, model = pickle.load(open(MODEL_PATH, 'rb'))
 
 
