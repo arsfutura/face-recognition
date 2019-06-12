@@ -34,12 +34,12 @@ def main():
     img = base64_to_img(args.image)
     faces = predict(img)
     draw_bb_on_img(faces, img)
-    print json.dumps(
+    print(json.dumps(
         {
             'people': faces,
             'img': img_to_base64(img)
         }
-    )
+    ))
 
 
 if __name__ == '__main__':

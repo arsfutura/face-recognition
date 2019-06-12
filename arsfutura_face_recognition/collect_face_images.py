@@ -36,4 +36,4 @@ if __name__ == '__main__':
     try:
         main(directory, args.person, args.test)
     except KeyboardInterrupt:
-        print "Photo session done for {} :)".format(args.person)
+        print("Photo session done for {} :)".format(args.person))

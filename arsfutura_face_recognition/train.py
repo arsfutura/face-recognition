@@ -33,8 +33,8 @@ def main():
     clf = GridSearchCV(classifier[0], classifier[1], cv=5, verbose=1)
     clf.fit(X, le.transform(y))
 
-    print clf.best_params_
-    print classification_report(le.transform(y), clf.predict(X), target_names=le.classes_)
+    print(clf.best_params_)
+    print(classification_report(le.transform(y), clf.predict(X), target_names=le.classes_))
     pickle.dump((le, clf), open(MODEL_PATH, 'wb'))
 
 
