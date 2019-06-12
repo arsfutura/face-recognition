@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 
 
-class Aligner(ABC):
+class FaceNet(ABC):
     @abstractmethod
-    def align(self, img):
+    def forward(self, img):
         pass
 
     def __call__(self, *args, **kwargs):
-        self.align(*args, **kwargs)
+        self.forward(*args, **kwargs)
