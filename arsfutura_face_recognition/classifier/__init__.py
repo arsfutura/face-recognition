@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 
 
-class Aligner(ABC):
+class FaceClassifier(ABC):
     @abstractmethod
-    def align(self, img):
+    def predict(self, face_embedding):
         pass
 
     def __call__(self, *args, **kwargs):
-        return self.align(*args, **kwargs)
+        return self.predict(*args, **kwargs)

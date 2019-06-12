@@ -7,4 +7,4 @@ class FaceNet(ABC):
         pass
 
     def __call__(self, *args, **kwargs):
-        self.forward(*args, **kwargs)
+        return self.forward(*args, **kwargs)
