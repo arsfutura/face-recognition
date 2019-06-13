@@ -1,14 +1,16 @@
-from arsfutura_face_recognition.predict import predict
+from arsfutura_face_recognition.face_recogniser import face_recogniser_factory
 import argparse
 import base64
 import json
 import cv2
 import numpy as np
+from PIL import Image
 
 
 def parse_args():
     parser = argparse.ArgumentParser('Script for recognising faces on picture.')
     parser.add_argument('--image', required=True, help='Base64 representation of image.')
+    parser.add_argument('--classifier-path', required=True, help='Path to serialized classifier.')
     return parser.parse_args()
 
 
@@ -31,8 +33,9 @@ def draw_bb_on_img(faces, img):
 
 def main():
     args = parse_args()
-    img = base64_to_img(args.image)
-    faces = predict(img)
+    #img = Image.fromarray(base64_to_img(args.image))
+    img = Image.open('1.jpg')
+    faces = face_recogniser_factory(args)(img)
     draw_bb_on_img(faces, img)
     print(json.dumps(
         {

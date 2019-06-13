@@ -7,7 +7,7 @@ LABELS_PATH = DATA_PATH + 'labels.csv'
 
 def load_data():
     embeddings = pd.read_csv(EMBEDDINGS_PATH, header=None).values
-    labels = map(lambda label: label.split('/')[-2].upper(), pd.read_csv(LABELS_PATH, header=None).values[:, 1].tolist())
+    labels = list(map(lambda label: label.split('/')[-2].upper(), pd.read_csv(LABELS_PATH, header=None).values[:, 1].tolist()))
     return embeddings, labels
 
 
