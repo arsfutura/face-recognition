@@ -4,12 +4,13 @@ import base64
 import json
 import cv2
 import numpy as np
-from PIL import Image
 
 
 def parse_args():
     parser = argparse.ArgumentParser('Script for recognising faces on picture.')
-    parser.add_argument('--image', required=True, help='Base64 representation of image.')
+    image_group = parser.add_mutually_exclusive_group(required=True)
+    image_group.add_argument('--image-path', help='Path to image file.')
+    image_group.add_argument('--image-bs64', help='Base64 representation of image.')
     parser.add_argument('--classifier-path', required=True, help='Path to serialized classifier.')
     return parser.parse_args()
 
@@ -24,6 +25,13 @@ def img_to_base64(img):
     return base64.b64encode(buff)
 
 
+def load_image(args):
+    if args.image_path:
+        return cv2.imread(args.image_path)
+    if args.image_bs64:
+        return base64_to_img(args.image_bs64)
+
+
 def draw_bb_on_img(faces, img):
     for face in faces:
         cv2.rectangle(img, (face.bb.left(), face.bb.top()), (face.bb.right(), face.bb.bottom()), (0, 255, 0), 2)
@@ -33,14 +41,13 @@ def draw_bb_on_img(faces, img):
 
 def main():
     args = parse_args()
-    #img = Image.fromarray(base64_to_img(args.image))
-    img = Image.open('1.jpg')
+    img = load_image(args)
     faces = face_recogniser_factory(args)(img)
     draw_bb_on_img(faces, img)
     print(json.dumps(
         {
-            'people': faces,
-            'img': img_to_base64(img)
+            'people': list(map(lambda f: f.identity, faces)),
+            'img': str(img_to_base64(img), encoding='ascii')
         }
     ))
 
