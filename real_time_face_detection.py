@@ -1,18 +1,25 @@
-from __future__ import print_function, division
-
 import cv2
-from predict import predict
+import argparse
+from arsfutura_face_recognition.face_recogniser import face_recogniser_factory
+
+
+def parse_args():
+    parser = argparse.ArgumentParser('Script for recognising faces on picture.')
+    parser.add_argument('--classifier-path', required=True, help='Path to serialized classifier.')
+    return parser.parse_args()
 
 
 def main():
+    args = parse_args()
     cap = cv2.VideoCapture(0)
+    face_recogniser = face_recogniser_factory(args)
 
     while True:
         # Capture frame-by-frame
         ret, frame = cap.read()
         frame = cv2.flip(frame, 1)
 
-        faces = predict(frame)
+        faces = face_recogniser(frame)
         if faces is not None:
             for face in faces:
                 cv2.rectangle(frame, (face.bb.left(), face.bb.top()), (face.bb.right(), face.bb.bottom()), (0, 255, 0), 2)
