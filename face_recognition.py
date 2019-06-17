@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from arsfutura_face_recognition.face_recogniser import face_recogniser_factory
 import argparse
 import base64
@@ -7,7 +9,9 @@ import numpy as np
 
 
 def parse_args():
-    parser = argparse.ArgumentParser('Script for recognising faces on picture.')
+    parser = argparse.ArgumentParser(
+        'Script for recognising faces on picture. Output of this script is json with list of people on picture and '
+        'base64 encoded picture which has bounding boxes of people.')
     image_group = parser.add_mutually_exclusive_group(required=True)
     image_group.add_argument('--image-path', help='Path to image file.')
     image_group.add_argument('--image-bs64', help='Base64 representation of image.')

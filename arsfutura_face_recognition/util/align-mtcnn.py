@@ -1,6 +1,5 @@
 import os
 import argparse
-import numpy as np
 from torchvision import datasets, transforms
 from facenet_pytorch.models.mtcnn import MTCNN
 from PIL import Image

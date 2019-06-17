@@ -5,7 +5,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import classification_report
 from dataset import load_data
-from constants import MODEL_PATH
 from sklearn.ensemble import RandomForestClassifier
 
 CLASSIFIERS = {
@@ -35,7 +34,7 @@ def main():
 
     print(clf.best_params_)
     print(classification_report(le.transform(y), clf.predict(X), target_names=le.classes_))
-    pickle.dump((le, clf), open(MODEL_PATH, 'wb'))
+    pickle.dump((le, clf), open('../models/model.pkl', 'wb'))
 
 
 if __name__ == '__main__':

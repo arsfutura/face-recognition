@@ -1,11 +1,13 @@
+#!/usr/bin/env python
+
 import cv2
 import argparse
 from arsfutura_face_recognition.face_recogniser import face_recogniser_factory
 
 
 def parse_args():
-    parser = argparse.ArgumentParser('Script for recognising faces on picture.')
-    parser.add_argument('--classifier-path', required=True, help='Path to serialized classifier.')
+    parser = argparse.ArgumentParser('Script for real-time face recognition.')
+    parser.add_argument('--classifier-path', default='models/model.pkl', help='Path to serialized classifier.')
     return parser.parse_args()
 
 
