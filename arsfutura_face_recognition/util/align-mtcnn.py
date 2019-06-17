@@ -3,7 +3,6 @@ import argparse
 from torchvision import datasets, transforms
 from facenet_pytorch.models.mtcnn import MTCNN
 from PIL import Image
-import PIL.ExifTags as exif
 
 
 def parse_args():
@@ -33,12 +32,6 @@ def main():
     images.idx_to_class = {v: k for k, v in images.class_to_idx.items()}
     create_dirs(args.output_folder, images.classes)
 
-    # TODO
-    # v_to_tag = {v: k for k, v in exif.TAGS.items()}
-    # for img, y in images:
-    #     if 'parsed_exif' in img.info:
-    #         print(img.info['parsed_exif'][v_to_tag['Orientation']])
-
     mtcnn = MTCNN()
 
     for idx, (path, y) in enumerate(images.imgs):
@@ -53,6 +46,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    # v_to_tag = {v: k for k, v in exif.TAGS.items()}
-    # img = Image.open('../../data/images/joso/DSC_9056.JPG').convert('RGB')
-    # print()
