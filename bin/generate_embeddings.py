@@ -7,6 +7,9 @@ from torch.utils.data import DataLoader
 from facenet_pytorch.models.inception_resnet_v1 import InceptionResnetV1
 
 
+BATCH_SIZE = 32
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         "Script for generating face embeddings. Output of this script is 'embeddings.txt' which contains embeddings "
@@ -24,7 +27,7 @@ def main():
 
     aligned_images = datasets.ImageFolder(args.input_folder, transform=transforms.ToTensor())
     aligned_images.idx_to_class = {v: k for k, v in aligned_images.class_to_idx.items()}
-    data_loader = DataLoader(aligned_images, batch_size=32)
+    data_loader = DataLoader(aligned_images, batch_size=BATCH_SIZE)
     facenet = InceptionResnetV1(pretrained='vggface2').eval()
 
     embeddings = None
