@@ -2,7 +2,7 @@
 
 import cv2
 import argparse
-from arsfutura_face_recognition.face_recogniser import face_recogniser_factory
+from arsfutura_face_recognition import face_recogniser_factory
 
 
 def parse_args():
