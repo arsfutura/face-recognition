@@ -38,9 +38,10 @@ def load_image(args):
 
 def draw_bb_on_img(faces, img):
     for face in faces:
-        cv2.rectangle(img, (face.bb.left(), face.bb.top()), (face.bb.right(), face.bb.bottom()), (0, 255, 0), 2)
+        cv2.rectangle(img, (int(face.bb.left()), int(face.bb.top())), (int(face.bb.right()), int(face.bb.bottom())),
+                      (0, 255, 0), 2)
         cv2.putText(img, "%s %.2f%%" % (face.identity, face.probability),
-                    (face.bb.left(), face.bb.bottom() + 20), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (255, 255, 255), 1)
+                    (int(face.bb.left()), int(face.bb.bottom()) + 20), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (255, 255, 255), 1)
 
 
 def main():

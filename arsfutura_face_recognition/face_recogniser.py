@@ -44,15 +44,16 @@ class FaceRecogniser:
 
     def recognise_faces(self, img):
         img_pil = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-        aligned_img, bb = self.aligner(img_pil)
-        if aligned_img is None:
+        faces_imgs, bbs = self.aligner(img_pil)
+        if faces_imgs is None:
             # if no face is detected
             return None
 
-        embedding = self.facenet(aligned_img.unsqueeze(0)).detach().numpy()
-        person = self.classifier(embedding)
+        embeddings = self.facenet(faces_imgs).detach().numpy()
+        people = self.classifier(embeddings)
 
-        return [Face(BoundingBox(left=bb[0], top=bb[1], right=bb[2], bottom=bb[3]), person, 100)]
+        return [Face(BoundingBox(left=bb[0], top=bb[1], right=bb[2], bottom=bb[3]), person, 100)
+                for bb, person in zip(bbs, people)]
 
     def __call__(self, *args, **kwargs):
         return self.recognise_faces(*args, **kwargs)

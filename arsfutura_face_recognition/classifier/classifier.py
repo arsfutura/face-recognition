@@ -7,4 +7,4 @@ class FaceClassifierImpl(FaceClassifier):
         self.le, self.model = pickle.load(open(model_path, 'rb'))
 
     def predict(self, face_embedding):
-        return self.le.inverse_transform(self.model.predict(face_embedding))[0]
+        return self.le.inverse_transform(self.model.predict(face_embedding))
