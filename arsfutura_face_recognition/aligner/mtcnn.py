@@ -1,4 +1,4 @@
-from facenet_pytorch.models.mtcnn import MTCNN
+from facenet import MTCNN
 from . import Aligner
 
 

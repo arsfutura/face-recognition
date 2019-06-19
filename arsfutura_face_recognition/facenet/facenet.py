@@ -1,5 +1,5 @@
 from . import FaceNet
-from facenet_pytorch.models.inception_resnet_v1 import InceptionResnetV1
+from facenet import InceptionResnetV1
 
 
 class FaceNetImpl(FaceNet):
