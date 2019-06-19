@@ -1,5 +1,5 @@
 from collections import OrderedDict
-
+import random
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm
@@ -18,20 +18,21 @@ METHODS = {
 
 
 def main():
-    X, y = load_data()
+    X, labels = load_data()
     cls = METHODS['tsne']
     method = cls(n_components=2)
     transformed = method.fit_transform(X)
 
-    y = np.array(y)
+    y = set(labels)
+    labels = np.array(labels)
     plt.figure(figsize=(10, 12))
     colors = cm.rainbow(np.linspace(0, 1, len(y)))
     for label, color in zip(y, colors):
-        points = transformed[y == label, :]
-        plt.scatter(points[:, 0], points[:, 1], c=color, label=label, s=200, alpha=0.5)
-        plt.annotate(label, (points[0, 0], points[0, 1]), fontsize=15)
+        points = transformed[labels == label, :]
+        plt.scatter(points[:, 0], points[:, 1], c=[color], label=label, s=200, alpha=0.5)
+        for p1, p2 in random.sample(list(zip(points[:, 0], points[:, 1])), k=min(1, len(points))):
+            plt.annotate(label, (p1, p2), fontsize=15)
 
-    #plt.grid()
     handles, labels = plt.gca().get_legend_handles_labels()
     by_label = OrderedDict(zip(labels, handles))
     plt.legend(by_label.values(), by_label.keys())
