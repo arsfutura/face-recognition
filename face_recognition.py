@@ -8,7 +8,7 @@ import cv2
 import numpy as np
 
 
-def parse_args():
+def parse_args(args=None):
     parser = argparse.ArgumentParser(
         'Script for recognising faces on picture. Output of this script is json with list of people on picture and '
         'base64 encoded picture which has bounding boxes of people.')
@@ -16,7 +16,7 @@ def parse_args():
     image_group.add_argument('--image-path', help='Path to image file.')
     image_group.add_argument('--image-bs64', help='Base64 representation of image.')
     parser.add_argument('--classifier-path', required=True, help='Path to serialized classifier.')
-    return parser.parse_args()
+    return parser.parse_args(args)
 
 
 def base64_to_img(bs64_img):
@@ -44,11 +44,21 @@ def draw_bb_on_img(faces, img):
                     (int(face.bb.left()), int(face.bb.bottom()) + 20), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (255, 255, 255), 1)
 
 
-def main():
-    args = parse_args()
+def recognise_faces(img_bs64):
+    args = parse_args(args=['--image-bs64', img_bs64])
+    return _recognise_faces(args)
+
+
+def _recognise_faces(args):
     img = load_image(args)
     faces = face_recogniser_factory(args)(img)
     draw_bb_on_img(faces, img)
+    return faces, img
+
+
+def main():
+    args = parse_args()
+    faces, img = _recognise_faces(args)
     print(json.dumps(
         {
             'people': list(map(lambda f: f.identity, faces)),

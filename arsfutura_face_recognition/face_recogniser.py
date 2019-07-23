@@ -1,8 +1,10 @@
 import cv2
+import torch
 from PIL import Image
 from .aligner.factory import aligner_factory
 from .facenet.factory import facenet_factory
 from .classifier.factory import classifier_factory
+from facenet_pytorch.models.utils.detect_face import extract_face
 from collections import namedtuple
 
 Face = namedtuple('Face', 'bb identity probability')
@@ -44,12 +46,14 @@ class FaceRecogniser:
 
     def recognise_faces(self, img):
         img_pil = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-        faces_imgs, bbs = self.aligner(img_pil)
-        if faces_imgs is None:
+        bbs, _ = self.aligner(img_pil)
+        if bbs is None:
             # if no face is detected
             return None
 
-        embeddings = self.facenet(faces_imgs).detach().numpy()
+        faces = torch.stack([extract_face(img_pil, bb) for bb in bbs])
+        print(faces.size())
+        embeddings = self.facenet(faces).detach().numpy()
         people = self.classifier(embeddings)
 
         return [Face(BoundingBox(left=bb[0], top=bb[1], right=bb[2], bottom=bb[3]), person, 100)

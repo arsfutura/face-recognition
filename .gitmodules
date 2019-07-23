@@ -1,3 +1,0 @@
-[submodule "facenet"]
-	path = facenet
-	url = git@github.com:arsfutura/facenet-pytorch.git
