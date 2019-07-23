@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from arsfutura_face_recognition import face_recogniser_factory
+from .arsfutura_face_recognition import face_recogniser_factory
 import argparse
 import json
 import cv2

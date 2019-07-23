@@ -2,7 +2,7 @@
 
 import cv2
 from PIL import Image
-from arsfutura_face_recognition import face_recogniser_factory
+from .arsfutura_face_recognition import face_recogniser_factory
 
 
 def main():
