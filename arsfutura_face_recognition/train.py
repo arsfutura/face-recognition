@@ -16,7 +16,7 @@ CLASSIFIERS = {
         ]
     ),
     'logreg': (
-        LogisticRegression(max_iter=100000),
+        LogisticRegression(max_iter=10000, solver='lbfgs', multi_class='multinomial'),
         {'C': [0.001, 0.1, 1, 10, 100, 1000]}
     )
 }
