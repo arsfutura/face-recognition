@@ -2,10 +2,10 @@
 
 from arsfutura_face_recognition import face_recogniser_factory
 import argparse
-import base64
 import json
 import cv2
 import numpy as np
+from PIL import Image
 
 
 def parse_args(args=None):
@@ -14,26 +14,8 @@ def parse_args(args=None):
         'base64 encoded picture which has bounding boxes of people.')
     image_group = parser.add_mutually_exclusive_group(required=True)
     image_group.add_argument('--image-path', help='Path to image file.')
-    image_group.add_argument('--image-bs64', help='Base64 representation of image.')
     parser.add_argument('--classifier-path', required=True, help='Path to serialized classifier.')
     return parser.parse_args(args)
-
-
-def base64_to_img(bs64_img):
-    decoded = base64.b64decode(bs64_img)
-    return cv2.imdecode(np.frombuffer(decoded, dtype=np.uint8), flags=cv2.IMREAD_COLOR)
-
-
-def img_to_base64(img):
-    ret, buff = cv2.imencode('.png', img)
-    return base64.b64encode(buff)
-
-
-def load_image(args):
-    if args.image_path:
-        return cv2.imread(args.image_path)
-    if args.image_bs64:
-        return base64_to_img(args.image_bs64)
 
 
 def draw_bb_on_img(faces, img):
@@ -44,25 +26,28 @@ def draw_bb_on_img(faces, img):
                     (int(face.bb.left()), int(face.bb.bottom()) + 20), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (255, 255, 255), 1)
 
 
-def recognise_faces(img_bs64):
-    args = parse_args(args=['--image-bs64', img_bs64])
-    return _recognise_faces(args)
+def recognise_faces(img):
+    return face_recogniser_factory()(img)
 
 
 def _recognise_faces(args):
-    img = load_image(args)
-    faces = face_recogniser_factory(args)(img)
-    draw_bb_on_img(faces, img)
-    return faces, img
+    img = Image.open(args.image_path)
+    faces = recognise_faces(img)
+    img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
+    draw_bb_on_img(faces, img_cv)
+    return faces, img_cv
 
 
 def main():
     args = parse_args()
     faces, img = _recognise_faces(args)
+    cv2.imshow('frame', img)
+    cv2.waitKey(1)
+    # TODO change
     print(json.dumps(
         {
             'people': list(map(lambda f: f.identity, faces)),
-            'img': str(img_to_base64(img), encoding='ascii')
+            'img': str(img)
         }
     ))
 

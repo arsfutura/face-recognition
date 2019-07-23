@@ -1,5 +1,5 @@
 from .facenet import FaceNetImpl
 
 
-def facenet_factory(args):
+def facenet_factory():
     return FaceNetImpl()

@@ -1,6 +1,4 @@
-import cv2
 import torch
-from PIL import Image
 from .aligner.factory import aligner_factory
 from .facenet.factory import facenet_factory
 from .classifier.factory import classifier_factory
@@ -30,11 +28,11 @@ class BoundingBox:
         return self._bottom
 
 
-def face_recogniser_factory(args):
+def face_recogniser_factory():
     return FaceRecogniser(
-        aligner=aligner_factory(args),
-        facenet=facenet_factory(args),
-        classifier=classifier_factory(args)
+        aligner=aligner_factory(),
+        facenet=facenet_factory(),
+        classifier=classifier_factory()
     )
 
 
@@ -45,14 +43,12 @@ class FaceRecogniser:
         self.classifier = classifier
 
     def recognise_faces(self, img):
-        img_pil = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-        bbs, _ = self.aligner(img_pil)
+        bbs, _ = self.aligner(img)
         if bbs is None:
             # if no face is detected
             return None
 
-        faces = torch.stack([extract_face(img_pil, bb) for bb in bbs])
-        print(faces.size())
+        faces = torch.stack([extract_face(img, bb) for bb in bbs])
         embeddings = self.facenet(faces).detach().numpy()
         people = self.classifier(embeddings)
 
