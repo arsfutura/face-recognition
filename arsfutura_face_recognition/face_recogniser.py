@@ -3,6 +3,7 @@ from .aligner.factory import aligner_factory
 from .facenet.factory import facenet_factory
 from .classifier.factory import classifier_factory
 from facenet_pytorch.models.utils.detect_face import extract_face
+from facenet_pytorch.models.mtcnn import prewhiten
 from collections import namedtuple
 
 Face = namedtuple('Face', 'bb identity probability')
@@ -46,9 +47,9 @@ class FaceRecogniser:
         bbs, _ = self.aligner(img)
         if bbs is None:
             # if no face is detected
-            return None
+            return []
 
-        faces = torch.stack([extract_face(img, bb) for bb in bbs])
+        faces = torch.stack([prewhiten(extract_face(img, bb)) for bb in bbs])
         embeddings = self.facenet(faces).detach().numpy()
         people = self.classifier(embeddings)
 
