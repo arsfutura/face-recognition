@@ -1,27 +1,20 @@
 #!/usr/bin/env python
 
 import cv2
-import argparse
+from PIL import Image
 from arsfutura_face_recognition import face_recogniser_factory
 
 
-def parse_args():
-    parser = argparse.ArgumentParser('Script for real-time face recognition.')
-    parser.add_argument('--classifier-path', default='models/model.pkl', help='Path to serialized classifier.')
-    return parser.parse_args()
-
-
 def main():
-    args = parse_args()
     cap = cv2.VideoCapture(0)
-    face_recogniser = face_recogniser_factory(args)
+    face_recogniser = face_recogniser_factory()
 
     while True:
         # Capture frame-by-frame
         ret, frame = cap.read()
         frame = cv2.flip(frame, 1)
 
-        faces = face_recogniser(frame)
+        faces = face_recogniser(Image.fromarray(frame))
         if faces is not None:
             for face in faces:
                 cv2.rectangle(frame, (int(face.bb.left()), int(face.bb.top())),

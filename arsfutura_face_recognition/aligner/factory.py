@@ -1,5 +1,5 @@
 from .mtcnn import MTCNNAligner
 
 
-def aligner_factory(args):
+def aligner_factory():
     return MTCNNAligner()

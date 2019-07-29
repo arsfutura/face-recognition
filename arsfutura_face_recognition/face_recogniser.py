@@ -1,8 +1,9 @@
-import cv2
-from PIL import Image
+import torch
 from .aligner.factory import aligner_factory
 from .facenet.factory import facenet_factory
 from .classifier.factory import classifier_factory
+from facenet_pytorch.models.utils.detect_face import extract_face
+from facenet_pytorch.models.mtcnn import prewhiten
 from collections import namedtuple
 
 Face = namedtuple('Face', 'bb identity probability')
@@ -28,11 +29,11 @@ class BoundingBox:
         return self._bottom
 
 
-def face_recogniser_factory(args):
+def face_recogniser_factory():
     return FaceRecogniser(
-        aligner=aligner_factory(args),
-        facenet=facenet_factory(args),
-        classifier=classifier_factory(args)
+        aligner=aligner_factory(),
+        facenet=facenet_factory(),
+        classifier=classifier_factory()
     )
 
 
@@ -43,13 +44,13 @@ class FaceRecogniser:
         self.classifier = classifier
 
     def recognise_faces(self, img):
-        img_pil = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-        faces_imgs, bbs = self.aligner(img_pil)
-        if faces_imgs is None:
+        bbs, _ = self.aligner(img)
+        if bbs is None:
             # if no face is detected
-            return None
+            return []
 
-        embeddings = self.facenet(faces_imgs).detach().numpy()
+        faces = torch.stack([prewhiten(extract_face(img, bb)) for bb in bbs])
+        embeddings = self.facenet(faces).detach().numpy()
         people = self.classifier(embeddings)
 
         return [Face(BoundingBox(left=bb[0], top=bb[1], right=bb[2], bottom=bb[3]), person, 100)
