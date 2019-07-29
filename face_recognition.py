@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
-from .arsfutura_face_recognition import face_recogniser_factory
+from arsfutura_face_recognition import face_recogniser_factory
 import argparse
-import json
 import cv2
 import numpy as np
 from PIL import Image
@@ -26,13 +25,9 @@ def draw_bb_on_img(faces, img):
                     (int(face.bb.left()), int(face.bb.bottom()) + 20), cv2.FONT_HERSHEY_TRIPLEX, 0.5, (255, 255, 255), 1)
 
 
-def recognise_faces(img):
-    return face_recogniser_factory()(img)
-
-
 def _recognise_faces(args):
     img = Image.open(args.image_path)
-    faces = recognise_faces(img)
+    faces = face_recogniser_factory()(img)
     img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
     draw_bb_on_img(faces, img_cv)
     return faces, img_cv
@@ -41,15 +36,10 @@ def _recognise_faces(args):
 def main():
     args = parse_args()
     faces, img = _recognise_faces(args)
-    cv2.imshow('frame', img)
+    cv2.imshow('image', img)
+    cv2.waitKey()
+    cv2.destroyAllWindows()
     cv2.waitKey(1)
-    # TODO change
-    print(json.dumps(
-        {
-            'people': list(map(lambda f: f.identity, faces)),
-            'img': str(img)
-        }
-    ))
 
 
 if __name__ == '__main__':
