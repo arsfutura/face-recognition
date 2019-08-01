@@ -1,47 +1,40 @@
 import torch
+import pickle
+import os
 from .aligner.factory import aligner_factory
 from .facenet.factory import facenet_factory
-from .classifier.factory import classifier_factory
 from facenet_pytorch.models.utils.detect_face import extract_face
-from facenet_pytorch.models.mtcnn import prewhiten
 from collections import namedtuple
 
-Face = namedtuple('Face', 'bb identity probability')
+Prediction = namedtuple('Prediction', 'id name confidence')
+Face = namedtuple('Face', 'top_prediction bb all_predictions')
+BoundingBox = namedtuple('BoundingBox', 'left top right bottom')
 
 
-class BoundingBox:
-    def __init__(self, left, top, right, bottom):
-        self._left = left
-        self._top = top
-        self._right = right
-        self._bottom = bottom
-
-    def left(self):
-        return self._left
-
-    def top(self):
-        return self._top
-
-    def right(self):
-        return self._right
-
-    def bottom(self):
-        return self._bottom
-
-
-def face_recogniser_factory():
+def face_recogniser_factory(include_predictions=False):
     return FaceRecogniser(
         aligner=aligner_factory(),
         facenet=facenet_factory(),
-        classifier=classifier_factory()
+        include_predictions=include_predictions
     )
 
 
+def top_prediction(le, probs):
+    top_label = probs.argmax()
+    return Prediction(id=top_label, name=le.classes_[top_label], confidence=probs[top_label])
+
+
+def to_predictions(le, probs):
+    return [Prediction(id=i, name=le.classes_[i], confidence=prob) for i, prob in enumerate(probs)]
+
+
 class FaceRecogniser:
-    def __init__(self, aligner, facenet, classifier):
+    def __init__(self, aligner, facenet, include_predictions):
         self.aligner = aligner
         self.facenet = facenet
-        self.classifier = classifier
+        self.le, self.classifier = pickle.load(
+            open(os.path.join(os.path.dirname(__file__), '../models/model.pkl'), 'rb'))
+        self.include_predictions = include_predictions
 
     def recognise_faces(self, img):
         bbs, _ = self.aligner(img)
@@ -49,12 +42,18 @@ class FaceRecogniser:
             # if no face is detected
             return []
 
-        faces = torch.stack([prewhiten(extract_face(img, bb)) for bb in bbs])
+        faces = torch.stack([extract_face(img, bb) for bb in bbs])
         embeddings = self.facenet(faces).detach().numpy()
-        people = self.classifier(embeddings)
+        predictions = self.classifier.predict_proba(embeddings)
 
-        return [Face(BoundingBox(left=bb[0], top=bb[1], right=bb[2], bottom=bb[3]), person, 100)
-                for bb, person in zip(bbs, people)]
+        return [
+            Face(
+                top_prediction=top_prediction(self.le, probs),
+                bb=BoundingBox(left=bb[0], top=bb[1], right=bb[2], bottom=bb[3]),
+                all_predictions=None if not self.include_predictions else to_predictions(self.le, probs)
+            )
+            for bb, probs in zip(bbs, predictions)
+        ]
 
     def __call__(self, *args, **kwargs):
         return self.recognise_faces(*args, **kwargs)

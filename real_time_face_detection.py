@@ -17,12 +17,11 @@ def main():
         faces = face_recogniser(Image.fromarray(frame))
         if faces is not None:
             for face in faces:
-                cv2.rectangle(frame, (int(face.bb.left()), int(face.bb.top())),
-                              (int(face.bb.right()), int(face.bb.bottom())),
+                cv2.rectangle(frame, (int(face.bb.left), int(face.bb.top)), (int(face.bb.right), int(face.bb.bottom)),
                               (0, 255, 0), 2)
-                cv2.putText(frame, "%s %.2f%%" % (face.identity, face.probability),
-                            (int(face.bb.left()), int(face.bb.bottom()) + 20), cv2.FONT_HERSHEY_TRIPLEX, 0.5,
-                            (255, 255, 255), 1)
+                cv2.putText(frame, "%s %.2f%%" % (face.top_prediction.name.upper(), face.top_prediction.confidence * 100),
+                            (int(face.bb.left), int(face.bb.top) - 10), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 255, 255), 4,
+                            cv2.LINE_AA)
 
         # Display the resulting frame
         cv2.imshow('frame', frame)
