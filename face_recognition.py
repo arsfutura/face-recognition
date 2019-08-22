@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from arsfutura_face_recognition import face_recogniser_factory
+import joblib
 import argparse
 import cv2
 import numpy as np
@@ -11,6 +11,7 @@ def parse_args(args=None):
     parser = argparse.ArgumentParser(
         'Script for recognising faces on picture. Output of this script is json with list of people on picture and '
         'base64 encoded picture which has bounding boxes of people.')
+    parser.add_argument('-m', '--model-path', required=True, help='Path to face recogniser model.')
     parser.add_argument('--image-path', required=True, help='Path to image file.')
     return parser.parse_args(args)
 
@@ -25,8 +26,8 @@ def draw_bb_on_img(faces, img):
 
 
 def _recognise_faces(args):
-    img = Image.open(args.image_path)
-    faces = face_recogniser_factory(include_predictions=True)(img)
+    img = Image.open(args.image_path).convert('RGB')
+    faces = joblib.load(args.model_path)(img)
     img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
     draw_bb_on_img(faces, img_cv)
     return faces, img_cv

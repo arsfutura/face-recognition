@@ -1,4 +1,4 @@
-from .arsfutura_face_recognition import face_recogniser_factory
+from .face_recognition import face_recogniser_factory
 
 face_recognizer = face_recogniser_factory(include_predictions=True)
 

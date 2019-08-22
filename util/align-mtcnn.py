@@ -4,7 +4,7 @@ import os
 import argparse
 from torchvision import datasets, transforms
 from facenet_pytorch.models.mtcnn import MTCNN
-from arsfutura_face_recognition import preprocessing
+from face_recognition import preprocessing
 from PIL import Image
 
 

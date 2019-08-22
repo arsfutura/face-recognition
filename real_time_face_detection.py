@@ -1,13 +1,21 @@
 #!/usr/bin/env python
 
+import argparse
+import joblib
 import cv2
 from PIL import Image
-from arsfutura_face_recognition import face_recogniser_factory
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-m', '--model-path', required=True, help='Path to face recogniser model.')
+    return parser.parse_args()
 
 
 def main():
+    args = parse_args()
     cap = cv2.VideoCapture(0)
-    face_recogniser = face_recogniser_factory()
+    face_recogniser = joblib.load(args.model_path)
 
     while True:
         # Capture frame-by-frame
