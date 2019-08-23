@@ -2,6 +2,7 @@ import os
 import argparse
 import joblib
 import numpy as np
+from PIL import Image
 from torchvision import transforms, datasets
 from sklearn.linear_model import LogisticRegression
 from face_recognition import preprocessing, FaceFeaturesExtractor, FaceRecogniser
@@ -18,18 +19,31 @@ def parse_args():
 def main():
     args = parse_args()
 
-    dataset = datasets.ImageFolder(
-        args.dataset_path,
-        transform=transforms.Compose([
-            preprocessing.ExifOrientationNormalize()
-            # TODO resizing of image
-        ]))
+    dataset = datasets.ImageFolder(args.dataset_path)
+    transform = transforms.Compose([
+            preprocessing.ExifOrientationNormalize(),
+            transforms.Resize(1024)
+        ])
 
     features_extractor = FaceFeaturesExtractor()
-    embeddings = np.stack([features_extractor(img)[1].flatten() for img, _ in dataset])
+    embeddings = []
+    labels = []
+    for img_path, label in dataset.samples:
+        print(img_path)
+        _, embedding = features_extractor(transform(Image.open(img_path).convert('RGB')))
+        if embedding is None:
+            print("Could not find place on {}".format(img_path))
+            continue
+        if embedding.shape[0] > 1:
+            print("Multiple faces detected for {}, taking one with highest probability".format(img_path))
+            embedding = embedding[0, :]
+        embeddings.append(embedding.flatten())
+        labels.append(label)
+
+    embeddings = np.stack(embeddings)
 
     clf = LogisticRegression(C=10)
-    clf.fit(embeddings, dataset.targets)
+    clf.fit(embeddings, labels)
 
     idx_to_class = {v: k for k, v in dataset.class_to_idx.items()}
     model_path = os.path.join(args.output_path, 'face_recogniser.pkl')
