@@ -11,8 +11,6 @@ from face_recognition import preprocessing, FaceFeaturesExtractor, FaceRecognise
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--dataset-path', required=True, help='Path to folder with images.')
-    parser.add_argument('-o', '--output-path', default='..',
-                        help='Path where trained model and label encoder will be saved.')
     return parser.parse_args()
 
 
@@ -46,7 +44,7 @@ def main():
     clf.fit(embeddings, labels)
 
     idx_to_class = {v: k for k, v in dataset.class_to_idx.items()}
-    model_path = os.path.join(args.output_path, 'face_recogniser.pkl')
+    model_path = os.path.join('model', 'face_recogniser.pkl')
     joblib.dump(FaceRecogniser(features_extractor, clf, idx_to_class), model_path)
 
 
