@@ -8,6 +8,9 @@ from sklearn.linear_model import LogisticRegression
 from face_recognition import preprocessing, FaceFeaturesExtractor, FaceRecogniser
 
 
+MODEL_DIR_PATH = 'model'
+
+
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--dataset-path', required=True, help='Path to folder with images.')
@@ -30,7 +33,7 @@ def main():
         print(img_path)
         _, embedding = features_extractor(transform(Image.open(img_path).convert('RGB')))
         if embedding is None:
-            print("Could not find place on {}".format(img_path))
+            print("Could not find face on {}".format(img_path))
             continue
         if embedding.shape[0] > 1:
             print("Multiple faces detected for {}, taking one with highest probability".format(img_path))
@@ -40,10 +43,13 @@ def main():
 
     embeddings = np.stack(embeddings)
 
-    clf = LogisticRegression(C=10)
+    clf = LogisticRegression(C=10, solver='lbfgs', multi_class='multinomial')
     clf.fit(embeddings, labels)
 
     idx_to_class = {v: k for k, v in dataset.class_to_idx.items()}
+
+    if not os.path.isdir(MODEL_DIR_PATH):
+        os.mkdir(MODEL_DIR_PATH)
     model_path = os.path.join('model', 'face_recogniser.pkl')
     joblib.dump(FaceRecogniser(features_extractor, clf, idx_to_class), model_path)
 

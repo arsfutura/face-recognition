@@ -212,6 +212,7 @@ pyvenv.cfg
 .venv
 pip-selfcheck.json
 
-# Ignore Data existing models
+# My ignores
 data
 model/*
+ignored
