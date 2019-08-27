@@ -17,16 +17,12 @@ def parse_args():
     return parser.parse_args()
 
 
-def main():
-    args = parse_args()
-
-    dataset = datasets.ImageFolder(args.dataset_path)
+def dataset_to_embeddings(dataset, features_extractor):
     transform = transforms.Compose([
             preprocessing.ExifOrientationNormalize(),
             transforms.Resize(1024)
         ])
 
-    features_extractor = FaceFeaturesExtractor()
     embeddings = []
     labels = []
     for img_path, label in dataset.samples:
@@ -41,7 +37,15 @@ def main():
         embeddings.append(embedding.flatten())
         labels.append(label)
 
-    embeddings = np.stack(embeddings)
+    return np.stack(embeddings), labels
+
+
+def main():
+    args = parse_args()
+
+    features_extractor = FaceFeaturesExtractor()
+    dataset = datasets.ImageFolder(args.dataset_path)
+    embeddings, labels = dataset_to_embeddings(dataset, features_extractor)
 
     clf = LogisticRegression(C=10, solver='lbfgs', multi_class='multinomial')
     clf.fit(embeddings, labels)

@@ -36,7 +36,7 @@ def main():
     images.idx_to_class = {v: k for k, v in images.class_to_idx.items()}
     create_dirs(args.output_folder, images.classes)
 
-    mtcnn = MTCNN()
+    mtcnn = MTCNN(prewhiten=False)
 
     for idx, (path, y) in enumerate(images.imgs):
         print("Aligning {} {}/{} ".format(path, idx + 1, len(images)), end='')
