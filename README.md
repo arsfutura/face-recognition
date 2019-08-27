@@ -95,3 +95,7 @@ docker run --name face-recognition-api -d -p 5000:5000 face-recognition-api
 > WARNING Face Recognition API memory usage depends on image sizes it's processing, if you plan to process 
 high-resolution images Face Recognition API container will need at least 3GB of RAM (maybe more) to run, if you are 
 running Docker containers with limited amount of RAM you could encounter OOM. 
+
+## References
+* [https://github.com/timesler/facenet-pytorch](https://github.com/timesler/facenet-pytorch)
+* [https://github.com/davidsandberg/facenet](https://github.com/davidsandberg/facenet)
