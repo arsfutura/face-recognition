@@ -10,8 +10,8 @@ from .constants import MODEL_PATH
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        'Script for recognising faces on user-provided image. This script will process image, draw bounding boxes and '
-        'labels on image and display it. It will also optionally save that image')
+        'Script for detecting and classifying faces on user-provided image. This script will process image, draw '
+        'bounding boxes and labels on image and display it. It will also optionally save that image.')
     parser.add_argument('--image-path', required=True, help='Path to image file.')
     parser.add_argument('--save-dir', help='If save dir is provided image will be saved to specified directory.')
     return parser.parse_args()
