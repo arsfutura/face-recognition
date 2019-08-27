@@ -77,7 +77,41 @@ tasks/run_server.sh
 ```
 
 Server is running on port `5000`.
-Swagger API docs are available upon running server on `<root-url>:5000/docs`       
+Swagger API docs are available upon running server on `<root-url>:5000/docs`
+
+``POST /face-recognition``
+
+Example response:
+```
+{
+    "faces": [
+        {
+            "top_prediction": {
+                "label": "person1",
+                "confidence": 0.9051724841669186
+            },
+            "bounding_box": {
+                "left": 3103.2939949035645,
+                "top": 920.1620543003082,
+                "right": 3484.597170829773,
+                "bottom": 1605.22814142704
+            }
+        },
+        {
+            "top_prediction": {
+                "label": "person2",
+                "confidence": 0.5193666400755098
+            },
+            "bounding_box": {
+                "left": 1985.1384818404913,
+                "top": 950.2878819331527,
+                "right": 2383.1231556087732,
+                "bottom": 1566.2133588716388
+            }
+        }
+    ]
+}
+```
 
 ### Docker
 Easiest way to run Face Recognition API is through Docker container.
@@ -92,9 +126,7 @@ Run server
 docker run --name face-recognition-api -d -p 5000:5000 face-recognition-api
 ```
 
-> WARNING Face Recognition API memory usage depends on image sizes it's processing, if you plan to process 
-high-resolution images Face Recognition API container will need at least 3GB of RAM (maybe more) to run, if you are 
-running Docker containers with limited amount of RAM you could encounter OOM. 
+> WARNING If you are processing high-resolution images in a containers limited amount of memory you could encounter OOM. 
 
 ## References
 * [https://github.com/timesler/facenet-pytorch](https://github.com/timesler/facenet-pytorch)

@@ -26,8 +26,7 @@ bounding_box = api.model('BoundingBox', {
 })
 
 prediction = api.model('Prediction', {
-    'id': fields.Integer,
-    'name': fields.String,
+    'label': fields.String,
     'confidence': fields.Float
 })
 

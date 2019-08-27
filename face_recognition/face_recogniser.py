@@ -1,17 +1,17 @@
 from collections import namedtuple
 
-Prediction = namedtuple('Prediction', 'id name confidence')
+Prediction = namedtuple('Prediction', 'label confidence')
 Face = namedtuple('Face', 'top_prediction bb all_predictions')
 BoundingBox = namedtuple('BoundingBox', 'left top right bottom')
 
 
 def top_prediction(idx_to_class, probs):
     top_label = probs.argmax()
-    return Prediction(id=top_label, name=idx_to_class[top_label], confidence=probs[top_label])
+    return Prediction(label=idx_to_class[top_label], confidence=probs[top_label])
 
 
 def to_predictions(idx_to_class, probs):
-    return [Prediction(id=i, name=idx_to_class[i], confidence=prob) for i, prob in enumerate(probs)]
+    return [Prediction(label=idx_to_class[i], confidence=prob) for i, prob in enumerate(probs)]
 
 
 class FaceRecogniser:
