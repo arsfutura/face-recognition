@@ -4,6 +4,7 @@ import os
 import argparse
 from torchvision import datasets, transforms
 from facenet_pytorch.models.mtcnn import MTCNN
+from face_recognition import preprocessing
 from PIL import Image
 
 
@@ -27,6 +28,7 @@ def create_dirs(root_dir, classes):
 def main():
     args = parse_args()
     trans = transforms.Compose([
+        preprocessing.ExifOrientationNormalize(),
         transforms.Resize(1024)
     ])
 
@@ -34,7 +36,7 @@ def main():
     images.idx_to_class = {v: k for k, v in images.class_to_idx.items()}
     create_dirs(args.output_folder, images.classes)
 
-    mtcnn = MTCNN()
+    mtcnn = MTCNN(prewhiten=False)
 
     for idx, (path, y) in enumerate(images.imgs):
         print("Aligning {} {}/{} ".format(path, idx + 1, len(images)), end='')

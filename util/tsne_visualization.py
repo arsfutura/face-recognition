@@ -1,27 +1,29 @@
-from collections import OrderedDict
+import argparse
 import random
 import numpy as np
 import matplotlib.pyplot as plt
+from collections import OrderedDict
 from matplotlib.pyplot import cm
-from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
-from functools import partial
-from dataset import load_data
 import seaborn as sns
+
 sns.set()
 
 
-METHODS = {
-    'pca': PCA,
-    'tsne': partial(TSNE, perplexity=5, init='pca', learning_rate=200, verbose=1)
-}
+def parse_args():
+    parser = argparse.ArgumentParser('Script for visualising face embedding vectors with TSNE in 2D.')
+    parser.add_argument('-e', '--embeddings-path', required=True,
+                        help='Path to file with embeddings. File must be numpy matrix in txt format.')
+    parser.add_argument('-l', '--labels-path', required=True,
+                        help='Path to file with labels. File must be numpy matrix in txt format.')
+    return parser.parse_args()
 
 
 def main():
-    X, labels = load_data()
-    cls = METHODS['tsne']
-    method = cls(n_components=2)
-    transformed = method.fit_transform(X)
+    args = parse_args()
+    X, labels = np.loadtxt(args.embeddings_path), np.loadtxt(args.labels_path, dtype=np.str)
+    tsne = TSNE(n_components=2, n_iter=10000, perplexity=5, init='pca', learning_rate=200, verbose=1)
+    transformed = tsne.fit_transform(X)
 
     y = set(labels)
     labels = np.array(labels)
