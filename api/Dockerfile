@@ -12,7 +12,7 @@ WORKDIR /app
 
 RUN pip3 install -r requirements.txt
 
-COPY face_recognition /app/face_recognitiondocker
+COPY face_recognition /app/face_recognition
 COPY model /app/model
 COPY api /app/api
 
