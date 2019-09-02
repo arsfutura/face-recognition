@@ -2,7 +2,6 @@ import argparse
 import random
 import numpy as np
 import matplotlib.pyplot as plt
-from collections import OrderedDict
 from matplotlib.pyplot import cm
 from sklearn.manifold import TSNE
 import seaborn as sns
@@ -27,18 +26,15 @@ def main():
 
     y = set(labels)
     labels = np.array(labels)
-    plt.figure(figsize=(10, 12))
+    plt.figure(figsize=(20, 14))
     colors = cm.rainbow(np.linspace(0, 1, len(y)))
     for label, color in zip(y, colors):
         points = transformed[labels == label, :]
         plt.scatter(points[:, 0], points[:, 1], c=[color], label=label, s=200, alpha=0.5)
         for p1, p2 in random.sample(list(zip(points[:, 0], points[:, 1])), k=min(1, len(points))):
-            plt.annotate(label, (p1, p2), fontsize=15)
+            plt.annotate(label, (p1, p2), fontsize=30)
 
-    handles, labels = plt.gca().get_legend_handles_labels()
-    by_label = OrderedDict(zip(labels, handles))
-    plt.legend(by_label.values(), by_label.keys())
-
+    plt.savefig('tsne_visualization.png', transparent=True, bbox_inches='tight', pad_inches=0)
     plt.show()
 
 

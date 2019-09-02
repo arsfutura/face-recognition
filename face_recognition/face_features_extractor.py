@@ -8,7 +8,7 @@ from facenet_pytorch.models.utils.detect_face import extract_face
 class FaceFeaturesExtractor:
     def __init__(self):
         # TODO adjust threshold for detecting face
-        self.aligner = MTCNN(prewhiten=False, keep_all=True)
+        self.aligner = MTCNN(prewhiten=False, keep_all=True, thresholds=[0.6, 0.7, 0.9])
         self.facenet_preprocess = transforms.Compose([preprocessing.Whitening()])
         self.facenet = InceptionResnetV1(pretrained='vggface2').eval()
 
