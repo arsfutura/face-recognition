@@ -5,7 +5,7 @@ def draw_bb_on_img(faces, img):
     draw = ImageDraw.Draw(img)
     fs = max(20, round(img.size[0] * img.size[1] * 0.000005))
     font = ImageFont.truetype('fonts/font.ttf', fs)
-    margin = 10
+    margin = 5
 
     for face in faces:
         text = "%s %.2f%%" % (face.top_prediction.label.upper(), face.top_prediction.confidence * 100)
@@ -18,7 +18,7 @@ def draw_bb_on_img(faces, img):
                 (int(face.bb.right), int(face.bb.bottom))
             ),
             outline='green',
-            width=5
+            width=2
         )
 
         # text background
