@@ -1,16 +1,17 @@
-FROM ubuntu:18.04
+FROM python:3.7-slim-buster
 
 MAINTAINER Luka Dulčić "culuma@arsfutura.co"
 
-RUN apt-get update -y && \
-    apt-get install -y python3-pip python3-dev libsm6 libxext6 libxrender-dev
+RUN mkdir -p /app && \
+    apt-get update -y && \
+    apt-get install -y libsm6 libxext6 libxrender-dev libglib2.0-0
+
+WORKDIR /app
 
 # We copy just the requirements.txt first to leverage Docker cache
 COPY ./requirements.txt /app/requirements.txt
 
-WORKDIR /app
-
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt -f https://download.pytorch.org/whl/torch_stable.html
 
 COPY face_recognition /app/face_recognition
 COPY model /app/model
