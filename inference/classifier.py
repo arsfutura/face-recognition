@@ -38,7 +38,7 @@ def main():
         basename = os.path.basename(filename)
         name = basename.split('.')[0]
         ext = basename.split('.')[1]
-        img.save('{}-with-faces.{}'.format(name, ext))
+        img.save('{}_tagged.{}'.format(name, ext))
 
     img.show()
 

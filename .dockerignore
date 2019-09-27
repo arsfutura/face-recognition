@@ -237,4 +237,9 @@ fabric.properties
 
 data*
 test_data
+images
+fonts
+ignored
+notebooks
+
 

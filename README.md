@@ -6,7 +6,7 @@ Make sure you have [Python 3](https://realpython.com/installing-python/) and
 
 Install dependencies
 ```
-pip install -r requirements.txt
+pip install -r requirements.txt -f https://download.pytorch.org/whl/torch_stable.html
 ```
 
 # Train Face Recognition system
@@ -59,6 +59,9 @@ optional arguments:
   --save-dir SAVE_DIR   If save dir is provided image will be saved to
                         specified directory.
 ```
+Example output (model trained with one image of each person):
+
+![Celebrities selfie](images/ellen_selfie_tagged.jpg)
 
 #### `video_classifier.py`
 Script for detecting and classifying faces on video stream, it connects to default camera and performs face detection 
@@ -66,6 +69,9 @@ and classification on every frame.
 ```
 python -m inference.video_classifier
 ```
+
+Video stream example:
+![Video stream classifier](images/video_classifier_example.png)
 
 ## Face Recognition API
 You can use trained Face Recognition system as REST API, `api` folder contains simple 
@@ -129,5 +135,7 @@ docker run --name face-recognition-api -d -p 5000:5000 face-recognition-api
 > WARNING If you are processing high-resolution images in a containers limited amount of memory you could encounter OOM. 
 
 ## References
+* F. Schroff, D. Kalenichenko, and J. Philbin. Facenet: A unified embedding for face recognition and clustering. arXiv preprint arXiv:1503.03832, 2015. [PDF](https://arxiv.org/pdf/1503.03832.pdf)
+* Zhang, K., Zhang, Z., Li, Z., Qiao, Y.: Joint face detection and alignment using multi-task cascaded convolutional networks. arXiv preprint arXiv:1604.02878 (2016) [PDF](https://arxiv.org/pdf/1604.02878.pdf)
 * [https://github.com/timesler/facenet-pytorch](https://github.com/timesler/facenet-pytorch)
 * [https://github.com/davidsandberg/facenet](https://github.com/davidsandberg/facenet)
