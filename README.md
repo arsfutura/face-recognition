@@ -1,7 +1,7 @@
 This repository provides a framework for creating and using Face Recognition system. 
 
 # Installation
-Make sure you have [Python 3](https://realpython.com/installing-python/) and 
+Make sure you have [Python 3.5+](https://realpython.com/installing-python/) and 
 [`pip`](https://www.makeuseof.com/tag/install-pip-for-python/) installed.
 
 Install dependencies

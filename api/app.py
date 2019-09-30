@@ -57,6 +57,8 @@ class FaceRecognition(Resource):
             abort(400, "Image field '{}' doesn't exist in request!".format(IMAGE_KEY))
 
         img = Image.open(io.BytesIO(args[IMAGE_KEY].read()))
+        # convert image to RGB (stripping alpha channel if exists)
+        img = img.convert('RGB')
         faces = face_recogniser(img)
         return \
             {
