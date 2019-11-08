@@ -4,8 +4,10 @@ from PIL import Image
 from flask import Flask
 from flask_restplus import Api, Resource, fields, abort, inputs
 from werkzeug.datastructures import FileStorage
+from face_recognition import preprocessing
 
 face_recogniser = joblib.load('model/face_recogniser.pkl')
+preprocess = preprocessing.ExifOrientationNormalize()
 
 IMAGE_KEY = 'image'
 INCLUDE_PREDICTIONS_KEY = 'include_predictions'
@@ -57,6 +59,7 @@ class FaceRecognition(Resource):
             abort(400, "Image field '{}' doesn't exist in request!".format(IMAGE_KEY))
 
         img = Image.open(io.BytesIO(args[IMAGE_KEY].read()))
+        img = preprocess(img)
         # convert image to RGB (stripping alpha channel if exists)
         img = img.convert('RGB')
         faces = face_recogniser(img)
