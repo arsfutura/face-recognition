@@ -21,7 +21,7 @@ class ExifOrientationNormalize(object):
     """
 
     def __call__(self, img):
-        if 'parsed_exif' in img.info:
+        if 'parsed_exif' in img.info and exif_orientation_tag in img.info['parsed_exif']:
             orientation = img.info['parsed_exif'][exif_orientation_tag]
             transposes = exif_transpose_sequences[orientation]
             for trans in transposes:
