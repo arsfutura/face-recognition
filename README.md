@@ -1,4 +1,6 @@
-This repository provides a framework for creating and using Face Recognition system. 
+# Framework for creating and using Face Recognition system.
+This repository provides a simple framework for creating and using Face Recognition system. There is also a 
+[blog post](https://arsfutura.co/magazine/face-recognition-with-facenet-and-mtcnn/) associated with this repository.  
 
 # Installation
 Make sure you have [Python 3.5+](https://realpython.com/installing-python/) and 
@@ -6,7 +8,7 @@ Make sure you have [Python 3.5+](https://realpython.com/installing-python/) and
 
 Install dependencies
 ```
-pip install -r requirements.txt -f https://download.pytorch.org/whl/torch_stable.html
+pip install -r requirements.txt
 ```
 
 # Train Face Recognition system
@@ -33,6 +35,35 @@ After preparing images run following command to train Face Recognition system:
 ./tasks/train.sh path/to/folder/with/images
 ``` 
 Previous command will generate `model/face_recogniser.pkl` which represents trained Face Recognition system.
+
+`train.py` has other options for training too. Slow part of training is generating embeddings from images. You could 
+pre-generate embeddings with `util/generate_embeddings.py` and then just forward path to embeddings to train script, 
+that would speed up experimenting with training a lot.
+
+```
+usage: train.py [-h] [-d DATASET_PATH] [-e EMBEDDINGS_PATH] [-l LABELS_PATH]
+                [-c CLASS_TO_IDX_PATH] [--grid-search]
+
+Script for training Face Recognition model. You can either give path to
+dataset or provide path to pre-generated embeddings, labels and class_to_idx.
+You can pre-generate this with util/generate_embeddings.py script.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d DATASET_PATH, --dataset-path DATASET_PATH
+                        Path to folder with images.
+  -e EMBEDDINGS_PATH, --embeddings-path EMBEDDINGS_PATH
+                        Path to file with embeddings.
+  -l LABELS_PATH, --labels-path LABELS_PATH
+                        Path to file with labels.
+  -c CLASS_TO_IDX_PATH, --class-to-idx-path CLASS_TO_IDX_PATH
+                        Path to pickled class_to_idx dict.
+  --grid-search         If this option is enabled, grid search will be
+                        performed to estimate C parameter of Logistic
+                        Regression classifier. In order to use this option you
+                        have to have at least 3 examples of every class in
+                        your dataset. It is recommended to enable this option.
+```
 
 # Using Face Recognition
 
