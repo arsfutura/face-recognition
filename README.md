@@ -108,9 +108,14 @@ Video stream example:
 You can use trained Face Recognition system as REST API, `api` folder contains simple 
 [Flask](https://palletsprojects.com/p/flask/) API which provides frontend for Face Recognition system.
 
-Run server using following command:
+Run development server using following command:
 ```
-tasks/run_server.sh
+tasks/run_dev_server.sh
+```
+
+Run production server using following command:
+```
+tasks/run_prod_server.sh
 ```
 
 Server is running on port `5000`.

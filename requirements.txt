@@ -12,3 +12,4 @@ torch==1.2.0
 torchvision==0.4.0
 Werkzeug==0.15.2
 opencv-python==4.1.0.25
+uWSGI==2.0.18
