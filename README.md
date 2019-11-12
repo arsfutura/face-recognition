@@ -1,6 +1,7 @@
 # Framework for creating and using Face Recognition system.
 This repository provides a simple framework for creating and using Face Recognition system. There is also a 
-[blog post](https://arsfutura.co/magazine/face-recognition-with-facenet-and-mtcnn/) associated with this repository.  
+[blog post](https://arsfutura.co/magazine/face-recognition-with-facenet-and-mtcnn/) associated with this repository 
+which gives more details about the framework.  
 
 # Installation
 Make sure you have [Python 3.5+](https://realpython.com/installing-python/) and 
@@ -168,7 +169,8 @@ Run server
 docker run --name face-recognition-api -d -p 5000:5000 face-recognition-api
 ```
 
-> WARNING If you are processing high-resolution images in a containers limited amount of memory you could encounter OOM. 
+> WARNING If you are processing high-resolution images in a containers with limited amount of memory you could 
+> encounter OOM. 
 
 ## References
 * F. Schroff, D. Kalenichenko, and J. Philbin. Facenet: A unified embedding for face recognition and clustering. arXiv preprint arXiv:1503.03832, 2015. [PDF](https://arxiv.org/pdf/1503.03832.pdf)
