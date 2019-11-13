@@ -3,7 +3,7 @@ This repository provides a simple framework for creating and using Face Recognit
 [blog post](https://arsfutura.co/magazine/face-recognition-with-facenet-and-mtcnn/) associated with this repository 
 which gives more details about the framework.  
 
-![Face Recognition illustration](readme-illustration.png)
+![Face Recognition illustration](images/readme-illustration.png)
 
 # Installation
 Make sure you have [Python 3.5+](https://realpython.com/installing-python/) and 
