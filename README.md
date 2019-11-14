@@ -1,4 +1,4 @@
-# Framework for creating and using Face Recognition system.
+# Framework for creating and using a Face Recognition system.
 This repository provides a simple framework for creating and using Face Recognition system. There is also a 
 [blog post](https://arsfutura.co/magazine/face-recognition-with-facenet-and-mtcnn/) associated with this repository 
 which gives more details about the framework.  
