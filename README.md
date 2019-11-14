@@ -1,14 +1,17 @@
-This repository provides a framework for creating and using a Face Recognition system. 
+# Framework for creating and using Face Recognition system.
+This repository provides a simple framework for creating and using Face Recognition system. There is also a 
+[blog post](https://arsfutura.co/magazine/face-recognition-with-facenet-and-mtcnn/) associated with this repository 
+which gives more details about the framework.  
 
-![Face Recognition illustration](readme-illustration.png)
+![Face Recognition illustration](images/readme-illustration.png)
 
 # Installation
-Make sure you have [Python 3](https://realpython.com/installing-python/) and 
+Make sure you have [Python 3.5+](https://realpython.com/installing-python/) and 
 [`pip`](https://www.makeuseof.com/tag/install-pip-for-python/) installed.
 
 Install dependencies
 ```
-pip install -r requirements.txt -f https://download.pytorch.org/whl/torch_stable.html
+pip install -r requirements.txt
 ```
 
 # Train the Face Recognition system
@@ -35,6 +38,35 @@ After preparing the images run the following command to train the Face Recogniti
 ./tasks/train.sh path/to/folder/with/images
 ``` 
 The previous command will generate `model/face_recogniser.pkl` which represents the trained Face Recognition system.
+
+`train.py` has other options for training too. Slow part of training is generating embeddings from images. You could 
+pre-generate embeddings with `util/generate_embeddings.py` and then just forward path to embeddings to train script, 
+that would speed up experimenting with training a lot.
+
+```
+usage: train.py [-h] [-d DATASET_PATH] [-e EMBEDDINGS_PATH] [-l LABELS_PATH]
+                [-c CLASS_TO_IDX_PATH] [--grid-search]
+
+Script for training Face Recognition model. You can either give path to
+dataset or provide path to pre-generated embeddings, labels and class_to_idx.
+You can pre-generate this with util/generate_embeddings.py script.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d DATASET_PATH, --dataset-path DATASET_PATH
+                        Path to folder with images.
+  -e EMBEDDINGS_PATH, --embeddings-path EMBEDDINGS_PATH
+                        Path to file with embeddings.
+  -l LABELS_PATH, --labels-path LABELS_PATH
+                        Path to file with labels.
+  -c CLASS_TO_IDX_PATH, --class-to-idx-path CLASS_TO_IDX_PATH
+                        Path to pickled class_to_idx dict.
+  --grid-search         If this option is enabled, grid search will be
+                        performed to estimate C parameter of Logistic
+                        Regression classifier. In order to use this option you
+                        have to have at least 3 examples of every class in
+                        your dataset. It is recommended to enable this option.
+```
 
 # Using Face Recognition
 
@@ -77,9 +109,14 @@ Video stream example:
 You can use the trained Face Recognition system as a REST API. The `api` folder contains a simple 
 [Flask](https://palletsprojects.com/p/flask/) API which provides frontend for the Face Recognition system.
 
-Run the server using the following command:
+Run the development server using the following command:
 ```
-tasks/run_server.sh
+tasks/run_dev_server.sh
+```
+
+Run the production server using the following command:
+```
+tasks/run_prod_server.sh
 ```
 
 The server is running on port `5000`.

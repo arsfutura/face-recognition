@@ -15,7 +15,7 @@ def main(directory, name, test):
         # Display the resulting frame
         cv2.imshow(name, frame)
         if not test and i != 0 and i % 10 == 0:
-            cv2.imwrite("{}/{}{}.png".format(directory, name, i / 10), frame)
+            cv2.imwrite("{}/{}{}.png".format(directory, name, int(i / 10)), frame)
         i += 1
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break

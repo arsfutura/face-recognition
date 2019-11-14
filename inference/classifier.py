@@ -6,6 +6,7 @@ import argparse
 from PIL import Image
 from .util import draw_bb_on_img
 from .constants import MODEL_PATH
+from face_recognition import preprocessing
 
 
 def parse_args():
@@ -26,8 +27,10 @@ def recognise_faces(img):
 
 def main():
     args = parse_args()
+    preprocess = preprocessing.ExifOrientationNormalize()
     img = Image.open(args.image_path)
     filename = img.filename
+    img = preprocess(img)
     img = img.convert('RGB')
 
     faces, img = recognise_faces(img)
