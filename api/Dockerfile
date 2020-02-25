@@ -4,14 +4,15 @@ MAINTAINER Luka Dulčić "culuma@arsfutura.co"
 
 RUN mkdir -p /app && \
     apt-get update -y && \
-    apt-get install -y build-essential python3-dev libsm6 libxext6 libxrender-dev libglib2.0-0
+    apt-get install -y build-essential python3-dev libsm6 libxext6 libxrender-dev libglib2.0-0 && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
 # We copy just the requirements.txt first to leverage Docker cache
-COPY ./requirements.txt /app/requirements.txt
+COPY ./requirements_docker.txt /app/requirements.txt
 
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt --no-cache-dir -f https://download.pytorch.org/whl/torch_stable.html
 
 COPY face_recognition /app/face_recognition
 COPY model /app/model

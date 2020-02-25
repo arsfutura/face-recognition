@@ -5,7 +5,7 @@ from facenet_pytorch import InceptionResnetV1
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 from face_recognition import preprocessing
-from util import save_embeddings_data
+from .util import save_embeddings_data
 
 
 class ToTensor(object):
