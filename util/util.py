@@ -51,10 +51,10 @@ def dataset_to_embeddings(dataset, features_extractor, cache=None):
         else:
             _, embedding = features_extractor(transform(Image.open(img_path).convert('RGB')))
             if embedding is None:
-                print("\nCould not find face on {}".format(img_path))
+                print(" - Could not find face", end='')
                 continue
             if embedding.shape[0] > 1:
-                print("\nMultiple faces detected for {}, taking one with highest probability".format(img_path))
+                print(" - Multiple faces detected, taking one with highest probability".format(img_path), end='')
                 embedding = embedding[0, :]
             embedding = embedding.flatten()
             print()
